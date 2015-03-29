@@ -29,6 +29,25 @@ describe('hashTable', function() {
     expect(hashTable.retrieve('Steven')).to.equal(null);
   });
 
+  it('adding and subracting should affect count', function() {
+    hashTable.insert('c', 'd');
+
+    expect(hashTable._count).to.equal(1);
+    hashTable.insert('a', 'b');
+    expect(hashTable._count).to.equal(2);
+
+    hashTable.remove('a');
+
+    expect(hashTable._count).to.equal(1);
+
+
+    hashTable.remove('c');
+    expect(hashTable._count).to.equal(0);
+
+  });
+
+
+
   it('should handle hash function collisions', function(){
     var v1 = "val1";
     var v2 = "val2";
@@ -42,7 +61,7 @@ describe('hashTable', function() {
   });
 
   // (Extra credit! Remove the extra "x" when you want the following tests to run)
-  xit('should double in size when needed', function() {
+  it('should double in size when needed', function() {
     _.each(people, function(person) {
       var firstName = person[0], lastName = person[1];
       hashTable.insert(firstName,lastName);
@@ -50,17 +69,29 @@ describe('hashTable', function() {
     expect(hashTable._limit).to.equal(16);
   });
 
-  xit('should halve in size when needed', function() {
+   it('should contain original values after doubling in size', function() {
     _.each(people, function(person) {
       var firstName = person[0], lastName = person[1];
       hashTable.insert(firstName,lastName);
     });
     expect(hashTable._limit).to.equal(16);
-    hashTable.remove('George');
-    hashTable.remove('Dr.');
-    hashTable.remove('Steven');
-    hashTable.remove('John');
-    hashTable.remove('Mr.');
+    expect(hashTable.retrieve('Alan')).to.equal('Turing');
+    expect(hashTable.retrieve('Panda')).to.equal(null);
+    expect(hashTable.retrieve('George')).to.equal('Harrison');
+    expect(hashTable._count).to.equal(7);
+  });
+
+  it('should halve in size when needed', function() {
+    _.each(people, function(person) {
+      var firstName = person[0], lastName = person[1];
+      hashTable.insert(firstName,lastName);
+    });
+    expect(hashTable._limit).to.equal(16);
+    hashTable.remove('George'); //6
+    hashTable.remove('Dr.'); //5
+    hashTable.remove('Steven'); //4 - resize limit=8, 
+    hashTable.remove('John'); //3 
+    hashTable.remove('Mr.'); //2
     expect(hashTable._limit).to.equal(8);
   });
 });
